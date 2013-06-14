@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title></title>
-    <link rel="stylesheet" href="https://d10ajoocuyu32n.cloudfront.net/mobile/1.3.1/jquery.mobile-1.3.1.min.css">
+    <link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css">
 
     <!-- Extra Codiqa features -->
     <link rel="stylesheet" href="css/codiqa.ext.css">
@@ -20,30 +20,70 @@
 
     <!-- Cordova -->
     <script type="text/javascript" src="cordova.js"></script>
-</head>
-<body>
-<!-- Home -->
-<div data-role="page" id="page1">
-    <div id="head" data-theme="" data-role="header" class="head">
-        <h3>
-            Data Collector
-        </h3>
-    </div>
-    <div data-role="content">
-        <a id="tasks" data-role="button" href="#page1">
-            Tasks
-        </a>
-        <a id="synchronise" data-role="button" href="#page1" onclick="alert('Ya fucker!');">
-            Synchronise
-        </a>
-    </div>
-</div>
 
     <script type="text/javascript">
-        function loaded() {
-            alert('Cordova is working!');
-            navigator.getCurrentAcceleration().
+        var elements = {
+            accelerometer: $('#accelerometer')
+        };
+
+        var app = {
+            watchId: null,
+
+            loaded: function() {
+                app.startWatch();
+            },
+
+            startWatch: function() {
+                var options = {
+                    frequency: 300
+                };
+
+                app.watchId = navigator.accelerometer.watchAcceleration(app.onAccelerationSuccess, app.onAccelerationFailure);
+            },
+
+            stopWatch: function() {
+                if (app.watchId) {
+                    navigator.accelerator.clearWatch(app.watchId);
+                    app.watchId = null;
+                }
+            },
+
+            onAccelerationSuccess: function() {
+                var div = document.getElementById('accelerometer');
+
+                elements.div.html('Acceleration X: ' + acceleration.x + '<br />' +
+                        'Acceleration Y: ' + acceleration.y + '<br />' +
+                        'Acceleration Z: ' + acceleration.z + '<br />' +
+                        'Timestamp: '      + acceleration.timestamp + '<br />');
+            },
+
+            onAccelerationFailure: function() {
+                elements.div.html('Accelerator watch failed...');
+            }
         }
+
+        document.addEventListener("deviceready", app.loaded, false);
     </script>
+</head>
+<body>
+    <!-- Home -->
+    <div data-role="page" id="page1">
+        <div id="head" data-theme="" data-role="header" class="head">
+            <h3>
+                Data Collector
+            </h3>
+        </div>
+        <div data-role="content">
+            <a id="tasks" data-role="button" href="#page1">
+                Tasks
+            </a>
+            <a id="synchronise" data-role="button" href="#page1" onclick="alert('Ya fucker!');">
+                Synchronise
+            </a>
+        </div>
+        <div data-role="content" id="accelerometer">
+
+        </div>
+    </div>
 </body>
 </html>
