@@ -22,14 +22,20 @@
     <script type="text/javascript" src="cordova.js"></script>
 
     <script type="text/javascript">
-        var elements = {
-            accelerometer: $('#accelerometer')
+        var elements = e = {
+            accelerometer: $('#accelerometer'),
+            log: $('#log')
         };
 
         var app = {
             watchId: null,
 
+            log: function(msg) {
+                e.html(e.html() + '<br />' + msg);
+            },
+
             loaded: function() {
+                app.log('Loaded...');
                 app.startWatch();
             },
 
@@ -68,7 +74,7 @@
 <body>
     <!-- Home -->
     <div data-role="page" id="page1">
-        <div id="head" data-theme="" data-role="header" class="head">
+        <div id="head" data-role="header" class="head">
             <h3>
                 Data Collector
             </h3>
@@ -83,6 +89,9 @@
         </div>
         <div data-role="content" id="accelerometer">
             Accelerometer
+        </div>
+        <div data-role="content" id="log">
+
         </div>
     </div>
 </body>
