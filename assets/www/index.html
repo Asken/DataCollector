@@ -51,14 +51,14 @@
             onAccelerationSuccess: function() {
                 var div = document.getElementById('accelerometer');
 
-                elements.div.html('Acceleration X: ' + acceleration.x + '<br />' +
+                elements.accelerometer.html('Acceleration X: ' + acceleration.x + '<br />' +
                         'Acceleration Y: ' + acceleration.y + '<br />' +
                         'Acceleration Z: ' + acceleration.z + '<br />' +
                         'Timestamp: '      + acceleration.timestamp + '<br />');
             },
 
             onAccelerationFailure: function() {
-                elements.div.html('Accelerator watch failed...');
+                elements.accelerometer.html('Accelerator watch failed...');
             }
         }
 
