@@ -21,28 +21,52 @@
     <!-- Cordova -->
     <script type="text/javascript" src="cordova.js"></script>
 
+    <script src="http://debug.phonegap.com/target/target-script-min.js#kristianask"></script>
+
     <script type="text/javascript">
-        var elements = e = {
-            accelerometer: $('#accelerometer'),
-            log: $('#log')
-        };
+        var elements = {};
 
         var app = {
             watchId: null,
 
-            log: function(msg) {
-                e.html(e.html() + '<br />' + msg);
-            },
-
             loaded: function() {
-                app.log('Loaded...');
+                elements = e = {
+                    accelerometer: $('#accelerometer'),
+                    log: $('#log'),
+                    panelLeft: $('#panelleft'),
+                    panelRight: $('#panelright'),
+                    leftClose: $('#leftclose'),
+                    rightClose: $('#rightclose')
+                };
+
+                // Test the accelerator
                 app.startWatch();
+
+                // Testing some swiping left
+                $(document).on('swiperight', function(event, ui) {
+                    e.panelLeft.panel('open');
+                });
+
+                // Testing some swiping right
+                $(document).on('swipeleft', function(event, ui) {
+                    e.panelRight.panel('open');
+                });
+
+                e.leftClose.on('click', function(event, ui) {
+                    e.panelLeft.panel('close');
+                });
+
+                e.rightClose.on('click', function(event, ui) {
+                    e.panelRight.panel('close');
+                });
             },
 
             startWatch: function() {
                 var options = {
                     frequency: 300
                 };
+
+                console.log('Start watch');
 
                 app.watchId = navigator.accelerometer.watchAcceleration(app.onAccelerationSuccess, app.onAccelerationFailure);
             },
@@ -54,7 +78,9 @@
                 }
             },
 
-            onAccelerationSuccess: function() {
+            onAccelerationSuccess: function(acceleration) {
+                console.log('Acceleration success');
+
                 var div = document.getElementById('accelerometer');
 
                 elements.accelerometer.html('Acceleration X: ' + acceleration.x + '<br />' +
@@ -64,6 +90,8 @@
             },
 
             onAccelerationFailure: function() {
+                console.log('Accelerator failure');
+
                 elements.accelerometer.html('Accelerator watch failed...');
             }
         }
@@ -74,24 +102,135 @@
 <body>
     <!-- Home -->
     <div data-role="page" id="page1">
-        <div id="head" data-role="header" class="head">
+        <div data-role="header" class="head">
             <h3>
                 Data Collector
             </h3>
         </div>
         <div data-role="content">
+            <div data-role="panel" id="panelleft" data-theme="a" data-display="overlay" data-dismissable="true" data-position="left">
+                Left panel
+                <div data-role="button" id="leftclose">Close</div>
+            </div>
+            <div data-role="panel" id="panelright" data-theme="a" data-display="overlay" data-dismissable="true" data-position="right">
+                Right panel
+                <div data-role="button" id="rightclose">Close</div>
+            </div>
+            <div data-role="navbar" data-iconpos="top">
+                <ul>
+                    <li>
+                        <a href="#page1" data-transition="slide" data-theme="" data-icon="">
+                            Page 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page2" data-transition="slide" data-theme="" data-icon="">
+                            Page 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page3" data-transition="slide" data-theme="" data-icon="">
+                            Page 3
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <a id="tasks" data-role="button" href="#page1">
                 Tasks
             </a>
-            <a id="synchronise" data-role="button" href="#page1" onclick="alert('Ya fucker!');">
+            <a id="synchronise" data-role="button" href="#page1">
                 Synchronise
             </a>
+        </div>
+        <div data-role="listview">
+            <ul data-role="listview" data-inset="true">
+                <li data-role="list-divider" role="headeing">
+                    A selector
+                </li>
+                <li>
+                    <a href="#page2" data-transition="slide">
+                        Go to page 2
+                        <span class="ui-li-count">
+                            22
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#page3" data-transition="flip">
+                        Go to page 3
+                    </a>
+                </li>
+            </ul>
         </div>
         <div data-role="content" id="accelerometer">
             Accelerometer
         </div>
         <div data-role="content" id="log">
 
+        </div>
+    </div>
+
+    <div data-role="page" id="page2">
+        <div data-role="header" class="head">
+            <h3>
+                Data Collector
+            </h3>
+        </div>
+        <div data-role="content">
+            <div data-role="navbar" data-iconpos="top">
+                <ul>
+                    <li>
+                        <a href="#page1" data-transition="slide" data-theme="" data-icon="">
+                            Page 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page2" data-transition="slide" data-theme="" data-icon="">
+                            Page 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page3" data-transition="slide" data-theme="" data-icon="">
+                            Page 3
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#page1" data-transition="slide">
+                Go to page 1
+            </a>
+        </div>
+    </div>
+
+    <div data-role="page" id="page3">
+        <div data-role="header" class="head">
+            <h3>
+                Data Collector
+            </h3>
+        </div>
+        <div data-role="content">
+            <div data-role="navbar" data-iconpos="top">
+                <ul>
+                    <li>
+                        <a href="#page1" data-transition="slide" data-theme="" data-icon="">
+                            Page 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page2" data-transition="slide" data-theme="" data-icon="">
+                            Page 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#page3" data-transition="slide" data-theme="" data-icon="">
+                            Page 3
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#page1" data-transition="slide">
+                Go to page 1
+            </a>
         </div>
     </div>
 </body>
